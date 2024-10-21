@@ -10,6 +10,7 @@ AI서버: FastAPI<br/>
 비지니스 서버: Java SpringBoot
 
 DB: MariaDB<br/>
+
 캐싱/분산락: Redis
 
 이벤트/메세징: Kafka
