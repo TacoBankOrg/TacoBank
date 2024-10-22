@@ -46,6 +46,16 @@ services:
       - mariadb
     networks:
       - tacobank
+      -
+  email-server:
+    build: ./backend/email_server
+    container_name: email_server
+    ports:
+      - "8083:8083"
+    depends_on:
+      - mariadb
+    networks:
+      - tacobank
 
   frontend:
     build: ./frontend/react
@@ -72,6 +82,8 @@ services:
       auth-server:
         condition: service_started
       business-server:
+        condition: service_started
+      email-server:
         condition: service_started
       ai-server:
         condition: service_started
