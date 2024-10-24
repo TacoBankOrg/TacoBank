@@ -6,7 +6,7 @@ services:
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: tacobank_db
     ports:
-      - "3700:3306"
+      - "3333:3306"
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
@@ -62,6 +62,10 @@ services:
     container_name: front
     ports:
       - "5173:5173"
+    environment:
+      - PORT=5173
+      - VITE_HOST=0.0.0.0
+    command: ["npm", "run", "dev", "--", "--host", "0.0.0.0"]
     networks:
       - tacobank
 
@@ -78,17 +82,6 @@ services:
     container_name: api_gateway
     ports:
       - "80:80"
-    depends_on:
-      auth-server:
-        condition: service_started
-      business-server:
-        condition: service_started
-      email-server:
-        condition: service_started
-      ai-server:
-        condition: service_started
-      redis:
-        condition: service_healthy
     networks:
       - tacobank
 
@@ -97,6 +90,7 @@ volumes:
 
 networks:
   tacobank:
+    name: tacobank
     driver: bridge
 
 # docker rmi -f $(docker images -q) - 모든이미지 삭제
