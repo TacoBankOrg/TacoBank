@@ -1,5 +1,5 @@
 # Node.js 기반 프론트엔드 서버 배포
-FROM node:18-alpine
+FROM node:18-slim
 WORKDIR /app
 
 # 의존성 설치 및 코드 복사

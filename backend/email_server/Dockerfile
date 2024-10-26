@@ -4,7 +4,7 @@ WORKDIR /app
 COPY . .
 RUN gradle build --no-daemon -x test
 
-FROM openjdk:17-jdk-alpine
+FROM openjdk:17-jdk-slim
 WORKDIR /app
 COPY --from=builder /app/build/libs/*.jar email-server.jar
 EXPOSE 8083
