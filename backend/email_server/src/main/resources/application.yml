@@ -2,7 +2,7 @@ spring:
   application:
     name: email_server
   datasource:
-    url: jdbc:mariadb://localhost:3306/tacobank_db
+    url: jdbc:mariadb://mariadb:3306/tacobank_db
     username: root
     password: 1234
     driver-class-name: org.mariadb.jdbc.Driver
@@ -11,6 +11,7 @@ spring:
     hibernate:
       ddl-auto: update
       show-sql: true
+    database-platform: org.hibernate.dialect.MariaDBDialect
 
   data:
     redis:

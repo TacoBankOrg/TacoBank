@@ -8,6 +8,7 @@ TacoBank - 통합 자산관리 서비스
 인증서버: Java SpringBoot<br/>
 AI서버: FastAPI<br/>
 비지니스 서버: Java SpringBoot
+이메일 서버: Java SpringBoot
 
 DB: MariaDB<br/>
 

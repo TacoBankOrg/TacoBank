@@ -13,4 +13,4 @@ COPY . .
 
 # 5. FastAPI 서버 실행 (모듈 경로 명확히 지정)
 EXPOSE 8082
-CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "80823", "--reload"]
+CMD ["uvicorn", "app.main:app", "--host", "0.0.0.0", "--port", "8082", "--reload"]
