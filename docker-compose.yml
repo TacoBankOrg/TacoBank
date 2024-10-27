@@ -94,6 +94,7 @@ networks:
     driver: bridge
 
 # docker rmi -f $(docker images -q) - 모든이미지 삭제
+# docker images | grep tacobank | awk '{print $3}' | xargs docker rmi -f - tacobank가 이름에 포함된 이미지 삭제
 # docker rm $(docker ps -aq) - 모든 컨테이너 삭제
 # docker network prune -f - 기본 네트워크 제외 모든 네트워크 삭제
 # docker-compose up -d --build -  빌드 후 실행
