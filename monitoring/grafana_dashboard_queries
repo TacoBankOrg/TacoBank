@@ -1,0 +1,2 @@
+sum(rate(nginx_http_requests_total[1m])) - 1분당 http요청합
+sum by (status) (nginx_logs_http_response_count_total) - 응답status별 합계

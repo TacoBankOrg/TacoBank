@@ -1,4 +1,3 @@
-# ./backend/authentication_server/Dockerfile
 FROM gradle:8.10.2-jdk17 AS builder
 WORKDIR /app
 COPY . .
