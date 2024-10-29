@@ -1,8 +1,12 @@
-# 1. slim 이미지 사용
-FROM nginx:1.23-alpine
+FROM openresty/openresty:alpine
 
-# 2. NGINX 설정 파일 복사
-COPY nginx.conf /etc/nginx/nginx.conf
+# 로그 디렉터리와 파일 생성
+RUN mkdir -p /var/log/nginx && \
+    touch /var/log/nginx/proxy_debug.log && \
+    chmod 644 /var/log/nginx/proxy_debug.log
 
-# 3. 포트 지정
+COPY nginx.conf /usr/local/openresty/nginx/conf/nginx.conf
+
 EXPOSE 80
+
+CMD ["/usr/local/openresty/bin/openresty", "-g", "daemon off;"]
