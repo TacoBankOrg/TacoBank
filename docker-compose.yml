@@ -19,7 +19,7 @@ services:
 
   auth-server:
     build: ./backend/auth_server
-    container_name: auth_server
+    container_name: auth-server
     ports:
       - "8080:8080"
     depends_on:
@@ -29,7 +29,7 @@ services:
 
   business-server:
     build: ./backend/business_server
-    container_name: business_server
+    container_name: business-server
     ports:
       - "8081:8081"
     depends_on:
@@ -39,7 +39,7 @@ services:
 
   ai-server:
     build: ./backend/ai_server
-    container_name: ai_server
+    container_name: ai-server
     ports:
       - "8082:8082"
     depends_on:
@@ -49,7 +49,7 @@ services:
 
   email-server:
     build: ./backend/email_server
-    container_name: email_server
+    container_name: email-server
     ports:
       - "8083:8083"
     depends_on:
@@ -164,6 +164,7 @@ services:
       - "4040:4040"
     networks:
       - tacobank
+
 
 volumes:
   mariadb_data:

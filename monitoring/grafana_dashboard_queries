@@ -1,2 +1,4 @@
 sum(rate(nginx_http_requests_total[1m])) - 1분당 http요청합
 sum by (status) (nginx_logs_http_response_count_total) - 응답status별 합계
+process_cpu_usage - 서버 cpu 사용량
+jvm_memory_used_bytes / jvm_memory_max_bytes * 100 = 서버 jvm 메모리 사용량
