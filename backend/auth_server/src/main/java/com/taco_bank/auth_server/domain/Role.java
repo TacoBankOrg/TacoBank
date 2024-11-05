@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "role")
 @Getter
@@ -13,13 +15,13 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Role {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(length = 20)
+    @Column(columnDefinition = "VARCHAR(20) NOT NULL COMMENT '권한 이름'")
     private String roleName;
 
-    // Member와의 관계 설정
+    @OneToMany(mappedBy = "role", fetch = FetchType.LAZY)
+    private List<Member> members;
 }
