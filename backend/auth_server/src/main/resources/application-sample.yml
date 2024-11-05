@@ -28,8 +28,6 @@ management:
   health:
     db:
       enabled: true  # 데이터베이스 연결 상태 확인
-    redis:
-      enabled: true  # Redis 연결 상태 확인
 
 server:
   port: 8080
