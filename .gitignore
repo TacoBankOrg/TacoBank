@@ -10,12 +10,12 @@
 #**/*.sql
 #
 ## 4. 로그 파일 무시 (개발 중 생성됨)
-#**/*.log
+**/*.log
 #
 ## 5. Python 캐시 파일 무시
 #**/__pycache__/
 #**/*.py[cod]
 #
-#
-#
-#
+## 6. 모니터링 생성파일
+**/monitoring/grafana/data
+**/monitoring/prometheus/data
