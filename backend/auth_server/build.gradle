@@ -36,9 +36,6 @@ dependencies {
 	// Swagger 3.0.0
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
-	// Redis
-	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
-
 	// Monitoring
 	implementation 'org.springframework.boot:spring-boot-starter-actuator'
 	implementation 'io.micrometer:micrometer-registry-prometheus'
