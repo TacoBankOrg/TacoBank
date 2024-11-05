@@ -17,9 +17,6 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "BIGINT NOT NULL COMMENT '권한 ID'")
-    private Long roleId;
-
     @Column(columnDefinition = "VARCHAR(40) COMMENT '사용자 금융 식별번호'")
     private String userFinanceId;
 
