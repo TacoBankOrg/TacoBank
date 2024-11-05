@@ -13,25 +13,32 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 public class Member {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(columnDefinition = "BIGINT NOT NULL COMMENT '권한 ID'")
     private Long roleId;
 
-    @Column(length = 50)
-    private String name;
+    @Column(columnDefinition = "VARCHAR(40) COMMENT '사용자 금융 식별번호'")
+    private String userFinanceId;
 
-    @Column(length = 100)
+    @Column(columnDefinition = "VARCHAR(100) NOT NULL COMMENT '이메일(계정 아이디)'")
     private String email;
 
-    @Column(length = 255)
+    @Column(columnDefinition = "VARCHAR(255) NOT NULL COMMENT '비밀번호'")
     private String password;
 
-    @Column(length = 20)
+    @Column(columnDefinition = "VARCHAR(20) NOT NULL COMMENT '이름'")
+    private String name;
+
+    @Column(columnDefinition = "VARCHAR(20) NOT NULL COMMENT '전화번호'")
     private String tel;
 
-    // 관계 정의(Role 등)
+    @Column(columnDefinition = "VARCHAR(1) COMMENT '탈퇴 여부(탈퇴시, Y)'")
+    private String deleted;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "role_id", columnDefinition = "BIGINT COMMENT '권한 ID'")
+    private Role role;
 }
