@@ -37,10 +37,5 @@ management:
     redis:
       enabled: true  # Redis 연결 상태 확인
 
-
-
-
-
-
 server:
   port: 8081

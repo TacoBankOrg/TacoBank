@@ -1,5 +1,4 @@
 package com.taco_bank.business_server.domain.group.model;
-
 import com.taco_bank.business_server.domain.member.model.Member;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -15,10 +14,11 @@ import java.util.List;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "pay_group")
-public class Group {
+@Table(name = "pay_group_member")
+public class GroupMember {
+
+
 
 
 
 }
-
