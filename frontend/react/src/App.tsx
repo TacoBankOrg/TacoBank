@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import { useState } from "react";
+
 
 // 서버 상태 타입 정의
 interface ServerStatus {
@@ -39,7 +40,8 @@ const HealthCheck: React.FC = () => {
     };
 
     return (
-        <div>
+        <>
+         <div>
             <button onClick={() => checkHealth('auth')}>Auth Server</button>
             <p>Auth Server: {status.auth}</p>
 
@@ -52,6 +54,16 @@ const HealthCheck: React.FC = () => {
             <button onClick={() => checkHealth('email')}>Email Server</button>
             <p>Email Server: {status.email}</p>
         </div>
+        <div>
+        <iframe src="http://localhost:3000/d-solo/be2hf6gx8ndhce/tacobank?from=1730356747970&to=1730358547970&timezone=browser&refresh=auto&showCategory=Panel%20options&orgId=1&panelId=1&__feature.dashboardSceneSolo" width="450" height="200" frameBorder="0"></iframe>
+        <iframe src="http://localhost:3000/d-solo/be2hf6gx8ndhce/tacobank?from=1730356777787&to=1730358577787&timezone=browser&refresh=auto&showCategory=Panel%20options&orgId=1&panelId=2&__feature.dashboardSceneSolo" width="450" height="200" frameBorder="0"></iframe>
+        <iframe src="http://localhost:3000/d-solo/be2hf6gx8ndhce/tacobank?from=1730356797895&to=1730358597895&timezone=browser&refresh=auto&showCategory=Panel%20options&orgId=1&panelId=3&__feature.dashboardSceneSolo" width="450" height="200" frameBorder="0"></iframe>
+        <iframe src="http://localhost:3000/d-solo/be2hf6gx8ndhce/tacobank?from=1730356804492&to=1730358604492&timezone=browser&refresh=auto&showCategory=Panel%20options&orgId=1&panelId=4&__feature.dashboardSceneSolo" width="450" height="200" frameBorder="0"></iframe>
+        <iframe src="http://localhost:3000/d-solo/be2hf6gx8ndhce/tacobank?from=1730356814494&to=1730358614495&timezone=browser&refresh=auto&showCategory=Panel%20options&orgId=1&panelId=5&__feature.dashboardSceneSolo" width="450" height="200" frameBorder="0"></iframe>
+        <iframe src="http://localhost:3000/d-solo/be2hf6gx8ndhce/tacobank?from=1730356824495&to=1730358624495&timezone=browser&refresh=auto&showCategory=Panel%20options&orgId=1&panelId=6&__feature.dashboardSceneSolo" width="450" height="200" frameBorder="0"></iframe>
+        </div>
+        </>
+       
     );
 };
 

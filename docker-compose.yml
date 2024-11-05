@@ -17,6 +17,16 @@ services:
     networks:
       - tacobank
 
+#  mysqld_exporter:
+#    container_name: mysql_exporter
+#    image: quay.io/prometheus/mysqld-exporter
+#    environment:
+#      - DATA_SOURCE_NAME=root:1234@(mariadb:3333)/
+#    depends_on:
+#      - mariadb
+#    ports:
+#      - "9104:9104"
+
   auth-server:
     build: ./backend/auth_server
     container_name: auth-server
@@ -32,16 +42,6 @@ services:
     container_name: business-server
     ports:
       - "8081:8081"
-    depends_on:
-      - mariadb
-    networks:
-      - tacobank
-
-  ai-server:
-    build: ./backend/ai_server
-    container_name: ai-server
-    ports:
-      - "8082:8082"
     depends_on:
       - mariadb
     networks:
@@ -81,8 +81,6 @@ services:
         condition: service_started
       email-server:
         condition: service_started
-      ai-server:
-        condition: service_started
     networks:
       - tacobank
 
@@ -98,8 +96,6 @@ services:
         condition: service_started
       email-server:
         condition: service_started
-      ai-server:
-        condition: service_started
       redis:
         condition: service_started
     volumes:
@@ -111,7 +107,8 @@ services:
     image: prom/prometheus:latest
     container_name: prometheus
     volumes:
-      - ./monitoring/prometheus.yml:/etc/prometheus/prometheus.yml
+      - ./monitoring/prometheus/data:/prometheus
+      - ./monitoring/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
     command:
       - '--config.file=/etc/prometheus/prometheus.yml'
     ports:
@@ -123,6 +120,8 @@ services:
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
+    volumes:
+      - ./monitoring/grafana/data:/var/lib/grafana
     ports:
       - "3000:3000"
     networks:
@@ -173,6 +172,7 @@ networks:
   tacobank:
     name: tacobank
     driver: bridge
+
 
 # docker rmi -f $(docker images -q) - 모든이미지 삭제
 # docker images | grep msa | awk '{print $3}' | xargs docker rmi -f - msa가 이름에 포함된 이미지 삭제
