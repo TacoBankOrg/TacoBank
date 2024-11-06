@@ -43,7 +43,7 @@ public class SecurityConfig {
                         .requestMatchers(PUBLIC_API_URL).permitAll() // 인증 없이 접근 가능한 경로
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 허용
                         .requestMatchers(ADMIN_API_URL).hasRole("ADMIN") // Admin 페이지 권한 제한
-                        .anyRequest().authenticated())
+                        .anyRequest().authenticated()) // 이외 요청은 모두 인증 확인
                 .exceptionHandling((e) -> e.authenticationEntryPoint(new CustomAuthenticationEntryPoint())) // 인증되지 않은 사용자 접근 혹은 유효한 인증정보 부족한 경우(401 Unauthorized), 로그인 페이지로 이동
                 .addFilterBefore(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)

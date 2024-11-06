@@ -35,13 +35,14 @@ public class JwtProvider {
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
         // 권한을 클레임에 추가
-        String role = userDetails.getAuthorities().stream()
-                .findFirst().map(authority -> authority.getAuthority())
-                .orElse("ROLE_USER"); // Default Role = ROLE_USER
+        List<String> roles = userDetails.getAuthorities().stream()
+                .map(authority -> authority.getAuthority())
+                .collect(Collectors.toList());
+        // @TODO when role is null
 
         return Jwts.builder()
                 .setSubject(userDetails.getUsername())
-                .claim("ROLE", role)
+                .claim("ROLES", roles)
                 .setIssuedAt(new Date())
                 .setExpiration(new Date(System.currentTimeMillis() + expiration))
                 .signWith(SignatureAlgorithm.HS512, secretKey)
@@ -94,7 +95,7 @@ public class JwtProvider {
                 .build()
                 .parseClaimsJws(token)
                 .getBody()
-                .get("role", List.class);
+                .get("ROLES", List.class);
 
         return role.stream()
                 .map(SimpleGrantedAuthority::new)
