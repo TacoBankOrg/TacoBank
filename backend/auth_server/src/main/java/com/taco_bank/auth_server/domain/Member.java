@@ -17,9 +17,6 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition = "BIGINT NOT NULL COMMENT '권한 ID'")
-    private Long roleId;
-
     @Column(columnDefinition = "VARCHAR(40) COMMENT '사용자 금융 식별번호'")
     private String userFinanceId;
 
@@ -35,10 +32,10 @@ public class Member {
     @Column(columnDefinition = "VARCHAR(20) NOT NULL COMMENT '전화번호'")
     private String tel;
 
-    @Column(columnDefinition = "VARCHAR(1) COMMENT '탈퇴 여부(탈퇴시, Y)'")
+    @Column(columnDefinition = "VARCHAR(1) DEFAULT 'Y' COMMENT '탈퇴 여부(탈퇴시, Y)'")
     private String deleted;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", columnDefinition = "BIGINT COMMENT '권한 ID'")
     private Role role;
 }
