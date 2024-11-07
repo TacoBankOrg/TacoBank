@@ -1,5 +1,6 @@
 package com.taco_bank.auth_server.auth.config;
 
+import com.taco_bank.auth_server.auth.domain.security.handler.CustomAccessDeniedHandler;
 import com.taco_bank.auth_server.auth.domain.security.handler.CustomAuthenticationEntryPoint;
 import com.taco_bank.auth_server.auth.domain.security.authentication.CustomAuthenticationFilter;
 import com.taco_bank.auth_server.auth.domain.security.authentication.JwtAuthenticationFilter;
@@ -44,10 +45,12 @@ public class SecurityConfig {
                         .requestMatchers(HttpMethod.OPTIONS, "/**").permitAll() // OPTIONS 요청 허용
                         .requestMatchers(ADMIN_API_URL).hasRole("ADMIN") // Admin 페이지 권한 제한
                         .anyRequest().authenticated()) // 이외 요청은 모두 인증 확인
-                // @TODO 401,403 내려줘서 프론트에서 리다이렉트
-                .exceptionHandling((e) -> e.authenticationEntryPoint(new CustomAuthenticationEntryPoint())) // 인증되지 않은 사용자 접근 혹은 유효한 인증정보 부족한 경우(401 Unauthorized), 로그인 페이지로 이동
-                .addFilterBefore(customAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .exceptionHandling((e) -> e
+                        .authenticationEntryPoint(new CustomAuthenticationEntryPoint()) // 인증되지 않은 사용자 접근 혹은 유효한 인증정보 부족한 경우(401 Unauthorized)
+                        .accessDeniedHandler(new CustomAccessDeniedHandler()) // 403 Forbidden
+                )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
+                .addFilterAfter(customAuthenticationFilter, JwtAuthenticationFilter.class)
         ;
 
         return http.build();
