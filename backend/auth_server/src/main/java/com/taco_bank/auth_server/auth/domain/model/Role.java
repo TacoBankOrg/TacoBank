@@ -1,4 +1,4 @@
-package com.taco_bank.auth_server.domain;
+package com.taco_bank.auth_server.auth.domain.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

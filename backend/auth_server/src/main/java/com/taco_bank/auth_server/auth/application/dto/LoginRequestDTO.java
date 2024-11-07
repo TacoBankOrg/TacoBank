@@ -1,4 +1,4 @@
-package com.taco_bank.auth_server.dto;
+package com.taco_bank.auth_server.auth.application.dto;
 
 import lombok.Data;
 

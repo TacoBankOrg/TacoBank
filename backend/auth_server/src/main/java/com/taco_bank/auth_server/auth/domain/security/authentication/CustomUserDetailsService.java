@@ -1,7 +1,7 @@
-package com.taco_bank.auth_server.security;
+package com.taco_bank.auth_server.auth.domain.security.authentication;
 
-import com.taco_bank.auth_server.domain.Member;
-import com.taco_bank.auth_server.repository.MemberRepository;
+import com.taco_bank.auth_server.auth.domain.model.Member;
+import com.taco_bank.auth_server.auth.domain.repository.MemberRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;

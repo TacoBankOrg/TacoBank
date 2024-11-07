@@ -1,4 +1,4 @@
-package com.taco_bank.auth_server.config;
+package com.taco_bank.auth_server.auth.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.cors.CorsConfiguration;

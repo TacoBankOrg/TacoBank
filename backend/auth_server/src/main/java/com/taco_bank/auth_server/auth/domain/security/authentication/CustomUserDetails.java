@@ -1,4 +1,4 @@
-package com.taco_bank.auth_server.security;
+package com.taco_bank.auth_server.auth.domain.security.authentication;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
