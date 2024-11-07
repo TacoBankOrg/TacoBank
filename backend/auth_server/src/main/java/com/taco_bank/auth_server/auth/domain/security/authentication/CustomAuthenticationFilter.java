@@ -1,7 +1,7 @@
-package com.taco_bank.auth_server.security;
+package com.taco_bank.auth_server.auth.domain.security.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.taco_bank.auth_server.dto.LoginRequestDTO;
+import com.taco_bank.auth_server.auth.application.dto.LoginRequestDTO;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

@@ -1,4 +1,4 @@
-package com.taco_bank.auth_server.util.initChecker;
+package com.taco_bank.auth_server.common.util;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

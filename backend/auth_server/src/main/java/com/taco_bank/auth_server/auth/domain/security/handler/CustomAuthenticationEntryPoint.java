@@ -1,4 +1,4 @@
-package com.taco_bank.auth_server.security;
+package com.taco_bank.auth_server.auth.domain.security.handler;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +11,6 @@ import java.io.IOException;
 public class CustomAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        // Redirect to Front login page
-        response.sendRedirect("http://localhost:5173/login");
+
     }
 }

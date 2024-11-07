@@ -1,6 +1,6 @@
-package com.taco_bank.auth_server.repository;
+package com.taco_bank.auth_server.auth.domain.repository;
 
-import com.taco_bank.auth_server.domain.Member;
+import com.taco_bank.auth_server.auth.domain.model.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
