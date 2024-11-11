@@ -5,6 +5,7 @@ import com.taco_bank.auth_server.auth.application.dto.LoginRequestDTO;
 import com.taco_bank.auth_server.common.exception.ExceptionResponseWriter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -57,10 +58,16 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         // SecurityContextHolder에 Authenticaton 객체 자동 세팅
-        // 로그인 성공시 JWT 토큰 생성
+        // 로그인 성공시 JWT 토큰 생성 & 쿠키 세팅
         String token = jwtProvider.createToken(authResult);
         log.info("CustomAuthenticationFilter::successfulAuthentication - token: " + token);
 
+        Cookie authorizationCookie = new Cookie("Authorization", token);
+        authorizationCookie.setHttpOnly(true);
+        authorizationCookie.setMaxAge(60 * 10); // 10분
+        authorizationCookie.setPath("/"); // 모든 경로에서 쿠키가 유효하도록 설정
+
+        response.addCookie(authorizationCookie);
         response.addHeader("Authorization", "Bearer " + token);
     }
 
