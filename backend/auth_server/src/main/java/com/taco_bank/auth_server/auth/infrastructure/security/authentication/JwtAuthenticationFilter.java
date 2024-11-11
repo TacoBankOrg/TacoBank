@@ -1,4 +1,4 @@
-package com.taco_bank.auth_server.auth.domain.security.authentication;
+package com.taco_bank.auth_server.auth.infrastructure.security.authentication;
 
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -28,7 +28,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             SecurityContextHolder.getContext().setAuthentication(authentication);
             log.info("JwtAuthenticationFilter::doFilterInternal - getAuthentication : " + SecurityContextHolder.getContext().getAuthentication());
         }
-        log.info("JwtAuthenticationFilter::doFilterInternal - " + SecurityContextHolder.getContext().getAuthentication().getName() + " | " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
+        // log.info("JwtAuthenticationFilter::doFilterInternal - " + SecurityContextHolder.getContext().getAuthentication().getName() + " | " + SecurityContextHolder.getContext().getAuthentication().getAuthorities());
         filterChain.doFilter(request, response);
     }
 

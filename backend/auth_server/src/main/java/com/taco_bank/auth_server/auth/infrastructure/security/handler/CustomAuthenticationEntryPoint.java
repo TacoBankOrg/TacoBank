@@ -1,4 +1,4 @@
-package com.taco_bank.auth_server.auth.domain.security.handler;
+package com.taco_bank.auth_server.auth.infrastructure.security.handler;
 
 import com.taco_bank.auth_server.common.exception.ExceptionResponseWriter;
 import jakarta.servlet.ServletException;

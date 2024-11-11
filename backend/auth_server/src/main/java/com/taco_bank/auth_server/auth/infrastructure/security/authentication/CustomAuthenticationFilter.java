@@ -1,4 +1,4 @@
-package com.taco_bank.auth_server.auth.domain.security.authentication;
+package com.taco_bank.auth_server.auth.infrastructure.security.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taco_bank.auth_server.auth.application.dto.LoginRequestDTO;
