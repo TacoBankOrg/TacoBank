@@ -1,10 +1,10 @@
 package com.taco_bank.auth_server.auth.config;
 
-import com.taco_bank.auth_server.auth.domain.security.handler.CustomAccessDeniedHandler;
-import com.taco_bank.auth_server.auth.domain.security.handler.CustomAuthenticationEntryPoint;
-import com.taco_bank.auth_server.auth.domain.security.authentication.CustomAuthenticationFilter;
-import com.taco_bank.auth_server.auth.domain.security.authentication.JwtAuthenticationFilter;
-import com.taco_bank.auth_server.auth.domain.security.authentication.JwtProvider;
+import com.taco_bank.auth_server.auth.infrastructure.security.handler.CustomAccessDeniedHandler;
+import com.taco_bank.auth_server.auth.infrastructure.security.handler.CustomAuthenticationEntryPoint;
+import com.taco_bank.auth_server.auth.infrastructure.security.authentication.CustomAuthenticationFilter;
+import com.taco_bank.auth_server.auth.infrastructure.security.authentication.JwtAuthenticationFilter;
+import com.taco_bank.auth_server.auth.infrastructure.security.authentication.JwtProvider;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpMethod;

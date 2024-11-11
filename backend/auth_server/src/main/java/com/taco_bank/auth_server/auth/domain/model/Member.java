@@ -32,10 +32,24 @@ public class Member {
     @Column(columnDefinition = "VARCHAR(20) NOT NULL COMMENT '전화번호'")
     private String tel;
 
-    @Column(columnDefinition = "VARCHAR(1) DEFAULT 'Y' COMMENT '탈퇴 여부(탈퇴시, Y)'")
+    @Column(columnDefinition = "VARCHAR(1) DEFAULT 'N' NOT NULL COMMENT '탈퇴 여부(탈퇴시, Y)'")
     private String deleted;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "role_id", columnDefinition = "BIGINT COMMENT '권한 ID'")
     private Role role;
+
+    /**
+     * Member 관련 메서드
+     */
+    public static Member createMember(String email, String password, String name, String tel, Role role) {
+        Member member = new Member();
+        member.email = email;
+        member.password = password;
+        member.name = name;
+        member.tel = tel;
+        member.role = role;
+        member.deleted = "N";
+        return member;
+    }
 }

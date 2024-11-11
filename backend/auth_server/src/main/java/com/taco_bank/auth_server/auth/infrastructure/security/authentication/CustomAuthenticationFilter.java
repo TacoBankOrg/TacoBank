@@ -1,7 +1,8 @@
-package com.taco_bank.auth_server.auth.domain.security.authentication;
+package com.taco_bank.auth_server.auth.infrastructure.security.authentication;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.taco_bank.auth_server.auth.application.dto.LoginRequestDTO;
+import com.taco_bank.auth_server.common.exception.ExceptionResponseWriter;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -61,5 +62,17 @@ public class CustomAuthenticationFilter extends AbstractAuthenticationProcessing
         log.info("CustomAuthenticationFilter::successfulAuthentication - token: " + token);
 
         response.addHeader("Authorization", "Bearer " + token);
+    }
+
+    /**
+     * 인증 실패시
+     */
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response, AuthenticationException failed) throws IOException, ServletException {
+        log.info("CustomAuthenticationFilter::unsuccessfulAuthentication - Authentication failed: " + failed.getMessage());
+
+        // 실패 메시지 반환
+        String errorMessage = "아이디 또는 비밀번호가 잘못되었습니다. 다시 시도해주세요.";
+        ExceptionResponseWriter.writeExceptionResponse(response, HttpServletResponse.SC_UNAUTHORIZED, "Unauthorized", errorMessage);
     }
 }
