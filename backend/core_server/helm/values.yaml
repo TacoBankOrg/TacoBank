@@ -1,0 +1,69 @@
+replicaCount: 4
+
+image:
+  repository: "485298580046.dkr.ecr.ap-northeast-2.amazonaws.com/taco_core"
+  tag: "latest"
+  pullPolicy: "IfNotPresent"
+
+namespace: "taco-core"
+createNamespace: false
+
+
+service:
+  type: NodePort
+  port: 9002
+  targetPort: 9002
+  nodePort: 32000
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "100m"
+  limits:
+    memory: "512Mi"
+    cpu: "250m"
+
+autoscaling:
+  enabled: true
+  minReplicas: 4
+  maxReplicas: 8
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeAffinity:
+  enabled: true
+  requiredDuringSchedulingIgnoredDuringExecution:
+    - key: "kubernetes.io/hostname"
+      operator: "In"
+      values:
+        - "ip-172-31-21-139"
+        - "ip-172-31-22-110"
+
+env:
+  DDL_TYPE: "update"
+  PROFILE: ""
+  DB_HOST: ""
+  DB_PORT: ""
+  DB_NAME: ""
+  DB_USERNAME: ""
+  DB_PASSWORD: ""
+  REDIS_HOST: ""
+  REDIS_PORT: ""
+  TACO_CORE_PORT: ""
+  TESTBED_API_KEY: ""
+  TACO_JWT_SECRET: ""
+  TACO_JWT_EXP: ""
+  TACO_ENC_KEY: ""
+  TACO_NAVER_ACCESS_KEY: ""
+  TACO_NAVER_SECRET_KEY: ""
+  TACO_NAVER_SMS_ID: ""
+  TACO_NAVER_SMS_FROM: ""
+  TACO_NAVER_OCR_URL: ""
+  TACO_NAVER_OCR_SECRET: ""
+  AWS_S3_REGION: ""
+  AWS_S3_BUCKET_NAME: ""
+  AWS_S3_FOLDER_PATH_CORE: ""
+  AWS_S3_IAM_ACCESS_KEY: ""
+  AWS_S3_IAM_SECRET_KEY: ""
+
+

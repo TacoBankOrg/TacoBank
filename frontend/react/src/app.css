@@ -1,0 +1,75 @@
+#app-container {
+    width: var(--app-width);
+    max-width: 100vw;
+    height: var(--app-height);
+    background: var(--background);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  
+  #splash-container {
+    width: var(--app-width);
+    max-width: 100vw;
+    height: var(--app-height);
+    background: var(--splash-background);
+    display: flex;
+    flex-direction: column;
+    position: relative;
+  }
+  
+  #scrollable-content {
+    flex: 1; /* 중간 영역을 유연하게 채움 */
+    overflow-y: auto; /* 수직 스크롤 가능 */
+    margin-bottom: 56px; /* 네브바 높이만큼 하단 여백 추가 */
+  }
+  
+  .scrollable-content::-webkit-scrollbar {
+    display: none; /* Chrome, Safari에서 스크롤바 숨기기 */
+  }
+  
+  /* 네비게이션 스타일 */
+  nav {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: 80px;
+    display: flex;
+    justify-content: space-between;
+    background-color: var(--nav-bg-color); 
+  }
+  
+  nav div {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 100%;
+    justify-content: space-evenly;
+  }
+  
+  nav button {
+    width: 100%;
+    margin: 0;
+    padding: 0;
+    color: var(--button-color); 
+    border: none;
+    font-weight: 700;
+    font-size: medium;
+  }
+  
+  /* 라디오 버튼 스타일 */
+  input[type='radio'] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border: 1px solid #ccc;
+    border-radius: 50%;
+  }
+  
+  input[type='radio']:checked {
+    background-color: #536DFE;
+    border: 3px solid white;
+    box-shadow: 0 0 0 1.6px #536DFE;
+  }

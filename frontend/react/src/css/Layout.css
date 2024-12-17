@@ -1,0 +1,22 @@
+.layout-container {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* 화면 전체 높이 기준 */
+}
+
+.main-content {
+  flex: 1;
+  overflow-y: auto;
+  padding-bottom: 60px; /* 푸터 높이만큼 추가 패딩 */
+}
+
+.footer {
+  position: fixed; /* 푸터를 하단 고정 */
+  bottom: 0;
+  left: 0;
+  width: 100%; /* 가로폭 맞춤 */
+  height: 60px; /* 푸터 높이 */
+  background-color: white; /* 배경색 설정 */
+  z-index: 1000;
+  box-shadow: 0 -1px 5px rgba(0, 0, 0, 0.1); /* 그림자 효과 */
+}

@@ -17,9 +17,19 @@ services:
     networks:
       - tacobank
 
+#  mysqld_exporter:
+#    container_name: mysql_exporter
+#    image: quay.io/prometheus/mysqld-exporter
+#    environment:
+#      - DATA_SOURCE_NAME=root:1234@(mariadb:3333)/
+#    depends_on:
+#      - mariadb
+#    ports:
+#      - "9104:9104"
+
   auth-server:
     build: ./backend/auth_server
-    container_name: auth_server
+    container_name: auth-server
     ports:
       - "8080:8080"
     depends_on:
@@ -28,8 +38,8 @@ services:
       - tacobank
 
   business-server:
-    build: ./backend/business_server
-    container_name: business_server
+    build: backend/core_server
+    container_name: business-server
     ports:
       - "8081:8081"
     depends_on:
@@ -37,19 +47,9 @@ services:
     networks:
       - tacobank
 
-  ai-server:
-    build: ./backend/ai_server
-    container_name: ai_server
-    ports:
-      - "8082:8082"
-    depends_on:
-      - mariadb
-    networks:
-      - tacobank
-
   email-server:
     build: ./backend/email_server
-    container_name: email_server
+    container_name: email-server
     ports:
       - "8083:8083"
     depends_on:
@@ -74,6 +74,13 @@ services:
     container_name: redis
     ports:
       - "6379:6379"
+    depends_on:
+      auth-server:
+        condition: service_started
+      business-server:
+        condition: service_started
+      email-server:
+        condition: service_started
     networks:
       - tacobank
 
@@ -82,8 +89,81 @@ services:
     container_name: api_gateway
     ports:
       - "80:80"
+    depends_on:
+      auth-server:
+        condition: service_started
+      business-server:
+        condition: service_started
+      email-server:
+        condition: service_started
+      redis:
+        condition: service_started
+    volumes:
+      - ./nginx_logs:/var/log/nginx
     networks:
       - tacobank
+  #-----------------------------------monitoring
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    volumes:
+      - ./monitoring/prometheus/data:/prometheus
+      - ./monitoring/prometheus/config/prometheus.yml:/etc/prometheus/prometheus.yml
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+    ports:
+      - "9090:9090"
+    networks:
+      - tacobank
+
+  # Prometheus connection - http://prometheus:9090
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    volumes:
+      - ./monitoring/grafana/data:/var/lib/grafana
+    ports:
+      - "3000:3000"
+    networks:
+      - tacobank
+    depends_on:
+      - prometheus
+
+  #-----------------------------------exporters
+  node-exporter:
+    image: prom/node-exporter:latest
+    container_name: node_exporter
+    ports:
+      - "9100:9100"
+    networks:
+      - tacobank
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    container_name: nginx_exporter
+    ports:
+      - "9113:9113"
+    command:
+      - '-nginx.scrape-uri=http://nginx:80/nginx_status'
+    depends_on:
+      - nginx
+    networks:
+      - tacobank
+
+  nginx-log-exporter:
+    image: quay.io/martinhelmich/prometheus-nginxlog-exporter:v1.9.2
+    container_name: nginx_log_exporter
+    command:
+      - '--parser=text'
+      - '-config-file=/etc/nginx_log_exporter.yml'
+    volumes:
+      - ./monitoring/nginx_log_exporter.yml:/etc/nginx_log_exporter.yml:ro
+      - ./nginx_logs:/var/log/nginx:ro   # Nginx 로그 파일 경로 마운트
+    ports:
+      - "4040:4040"
+    networks:
+      - tacobank
+
 
 volumes:
   mariadb_data:
@@ -93,9 +173,12 @@ networks:
     name: tacobank
     driver: bridge
 
+
 # docker rmi -f $(docker images -q) - 모든이미지 삭제
+# docker images | grep msa | awk '{print $3}' | xargs docker rmi -f - msa가 이름에 포함된 이미지 삭제
 # docker rm $(docker ps -aq) - 모든 컨테이너 삭제
 # docker network prune -f - 기본 네트워크 제외 모든 네트워크 삭제
 # docker-compose up -d --build -  빌드 후 실행
 # docker-compose down - 실행중지
-# docker builder prune -a - 빌드캐시 삭제
+# docker builder prune -a - 빌드캐시삭제
+# docker-compose restart {컨테이너 이름} - 특정 컨테이너 재시작
