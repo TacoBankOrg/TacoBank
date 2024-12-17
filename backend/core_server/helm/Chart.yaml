@@ -1,0 +1,6 @@
+apiVersion: v2  # Helm 3 차트를 위한 올바른 API 버전
+name: tacobank-core-server
+description: Helm chart for deploying Tacobank core server
+type: application
+version: 0.1.0
+appVersion: 1.0.0

@@ -1,0 +1,61 @@
+spring:
+  datasource:
+    driver-class-name: org.mariadb.jdbc.Driver
+    url: jdbc:mariadb://${DB_HOST}:${DB_PORT}/${DB_NAME}
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: ${DDL_TYPE}
+    database-platform: org.hibernate.dialect.MariaDBDialect
+
+  data:
+    redis:
+      host: ${REDIS_HOST}
+      port: ${REDIS_PORT}
+      password: ${REDIS_PASSWORD}
+
+management:
+  health:
+    db:
+      enabled: true  # 데이터베이스 연결 상태 확인
+    redis:
+      enabled: true # redis 연결 상태 확인
+
+jwt:
+  secret: ${TACO_JWT_SECRET}
+server:
+  port: ${TACO_CORE_PORT}
+
+testbed:
+  api:
+    key: ${TESTBED_API_KEY}
+
+encryption:
+  secret:
+    key: ${TACO_ENC_KEY}
+
+naver:
+  access:
+    key: ${TACO_NAVER_ACCESS_KEY}
+  secret:
+    key: ${TACO_NAVER_SECRET_KEY}
+  sms:
+    service:
+      id: ${TACO_NAVER_SMS_ID}
+    from: ${TACO_NAVER_SMS_FROM}
+  ocr:
+    api:
+      url: ${TACO_NAVER_OCR_URL}
+      secret: ${TACO_NAVER_OCR_SECRET}
+
+aws:
+  s3:
+    bucket-name: ${AWS_S3_BUCKET_NAME}
+    folder: ${AWS_S3_FOLDER_PATH_CORE}
+    access-key: ${AWS_S3_IAM_ACCESS_KEY}
+    secret-key: ${AWS_S3_IAM_SECRET_KEY}
+    region: ${AWS_S3_REGION}
+
+

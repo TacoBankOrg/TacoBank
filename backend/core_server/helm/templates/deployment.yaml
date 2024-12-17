@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}-core
+  labels:
+    app: {{ .Chart.Name }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Chart.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Chart.Name }}
+    spec:
+      affinity:
+        {{- if .Values.nodeAffinity.enabled }}
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              {{- range .Values.nodeAffinity.requiredDuringSchedulingIgnoredDuringExecution }}
+              - matchExpressions:
+                  - key: "{{ .key }}"
+                    operator: "{{ .operator }}"
+                    values:
+                      {{- toYaml .values | nindent 22 }}
+              {{- end }}
+        {{- end }}
+
+      imagePullSecrets:
+        - name: ecr-secret
+      volumes:
+        - name: config-volume
+          configMap:
+            name: taco-core-config
+            items:
+              - key: application.yml
+                path: application.yml
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - containerPort: 9002
+          args:
+            - "--spring.config.location=/config/core/"
+          volumeMounts:
+            - name: config-volume
+              mountPath: /config/core
+          env:
+            - name: DDL_TYPE
+              value: "{{ .Values.env.DDL_TYPE }}"
+            - name: PROFILE
+              value: "{{ .Values.env.PROFILE }}"
+            - name: DB_HOST
+              value: "{{ .Values.env.DB_HOST }}"
+            - name: DB_PORT
+              value: "{{ .Values.env.DB_PORT }}"
+            - name: DB_NAME
+              value: "{{ .Values.env.DB_NAME }}"
+            - name: DB_USERNAME
+              value: "{{ .Values.env.DB_USERNAME }}"
+            - name: DB_PASSWORD
+              value: "{{ .Values.env.DB_PASSWORD }}"
+            - name: REDIS_HOST
+              value: "{{ .Values.env.REDIS_HOST }}"
+            - name: REDIS_PORT
+              value: "{{ .Values.env.REDIS_PORT }}"
+            - name: TACO_JWT_SECRET
+              value: "{{ .Values.env.TACO_JWT_SECRET }}"
+            - name: TACO_JWT_EXP
+              value: "{{ .Values.env.TACO_JWT_EXP }}"
+            - name: TACO_ENC_KEY
+              value: "{{ .Values.env.TACO_ENC_KEY }}"
+            - name: TACO_NAVER_ACCESS_KEY
+              value: "{{ .Values.env.TACO_NAVER_ACCESS_KEY }}"
+            - name: TACO_NAVER_SECRET_KEY
+              value: "{{ .Values.env.TACO_NAVER_SECRET_KEY }}"
+            - name: TACO_NAVER_SMS_ID
+              value: "{{ .Values.env.TACO_NAVER_SMS_ID }}"
+            - name: TACO_NAVER_SMS_FROM
+              value: "{{ .Values.env.TACO_NAVER_SMS_FROM }}"
+            - name: TACO_NAVER_OCR_URL
+              value: "{{ .Values.env.TACO_NAVER_OCR_URL }}"
+            - name: TACO_NAVER_OCR_SECRET
+              value: "{{ .Values.env.TACO_NAVER_OCR_SECRET }}"
+            - name: AWS_S3_REGION
+              value: "{{ .Values.env.AWS_S3_REGION }}"
+            - name: AWS_S3_BUCKET_NAME
+              value: "{{ .Values.env.AWS_S3_BUCKET_NAME }}"
+            - name: AWS_S3_FOLDER_PATH_CORE
+              value: "{{ .Values.env.AWS_S3_FOLDER_PATH_CORE }}"
+            - name: AWS_S3_IAM_ACCESS_KEY
+              value: "{{ .Values.env.AWS_S3_IAM_ACCESS_KEY }}"
+            - name: AWS_S3_IAM_SECRET_KEY
+              value: "{{ .Values.env.AWS_S3_IAM_SECRET_KEY }}"
+            - name: TESTBED_API_KEY
+              value: "{{ .Values.env.TESTBED_API_KEY }}"
+            - name: TACO_CORE_PORT
+              value: "{{ .Values.env.TACO_CORE_PORT }}"
+

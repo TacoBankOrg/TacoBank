@@ -1,0 +1,5 @@
+spring:
+  application:
+    name: tacobank_core_server
+  profiles:
+    active: ${PROFILE}

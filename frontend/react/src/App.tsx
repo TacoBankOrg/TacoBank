@@ -1,70 +1,156 @@
-import { useState } from "react";
+import { Routes, Route, Navigate } from "react-router-dom";
+import "./app.css";
+import Splash from "./pages/SplashPage";
+import Start from "./pages/StartPage";
+import Login from "./pages/auth/LoginPage";
+import Join from "./pages/auth/JoinPage";
+import FindEmail from "./pages/auth/FindEmailPage";
+import FindPassword from "./pages/auth/FindPasswordPage";
+import Home from "./pages/HomePage";
+import FriendList from "./pages/friends/FriendListPage";
+import GroupList from "./pages/groups/GroupListPage";
+import AddFriend from "./pages/friends/AddFriendPage";
+import ResetPassword from "./pages/auth/ResetPasswordPage";
+import BlockedList from "./pages/friends/BlockedListPage";
+import CreateGroup from "./pages/groups/CreateGroupPage";
+import GroupDetail from "./pages/groups/GroupDetailPage";
+import MemberSelect from "./pages/settlement/MemberSelectPage";
+import Split from "./pages/settlement/SplitPage";
+import Receipt from "./pages/settlement/ReceiptPage";
+import SettlementReq from "./pages/settlement/SettlementReqPage";
+import SettlementComplete from "./pages/settlement/SettlementCompletePage";
+import ReceiveMoney from "./pages/settlement/status/ReceiveMoneyPage";
+import SendMoney from "./pages/settlement/status/SendMoneyPage";
+import ReceiveDetail from "./pages/settlement/status/ReceiveDetailPage";
+import MyInfo from "./pages/mypage/MyInfoPage.tsx";
+import ChangePassword from "./pages/mypage/ChangePassword.tsx";
+import Settlement from "./pages/settlement/status/SettlementPage.tsx";
+import ChangePin from "./pages/mypage/ChangePinPage.tsx";
+import Transfer from "./pages/transfer/TransferPage.tsx";
+import SendAmount from "./pages/transfer/SendAmountPage.tsx";
+import { AuthContext } from "./context/AuthContext.tsx";
+import ConfirmTransfer from "./pages/transfer/ConfirmTransferPage.tsx";
+import TransferSuccess from "./pages/transfer/TransferSuccessPage.tsx";
+import SettlementOptionsPage from "./pages/settlement/SettlementOptionsPage.tsx";
+import EmailResult from "./pages/auth/EmailResultPage.tsx";
+import AccountDetail from "./pages/transfer/AccountDetailPage.tsx";
+import NotificationPage from "./pages/NotificationPage.tsx";
+import { useContext, useEffect } from "react";
+import { initializeInterceptors } from "./api/tacoApis.ts";
+import useAuth from "./hooks/useAuth.ts";
+import PrivateRoute from "./guard/PrivateRoute.tsx";
+import PublicRoute from "./guard/PublicRoute.tsx";
+import DeleteList from "./pages/friends/DeleteListPage.tsx";
+import NotFoundPage from "./pages/error/NotFoundPage.tsx";
+import ServerErrorPage from "./pages/error/ServerErrorPage.tsx";
+import RequireMydataLinked from "./guard/RequireMydataLinked.tsx";
 
+function App() {
+  const { removeMember } = useAuth();
+  const { isLoggedIn } = useContext(AuthContext);
+  const hasVisitedSplash = localStorage.getItem("hasVisitedSplash") === "true";
+  useEffect(() => {
+    initializeInterceptors(removeMember); // removeMember 전달
+  }, [removeMember]);
+  // Check current domain and target domain from .env
 
-// 서버 상태 타입 정의
-interface ServerStatus {
-    auth: string;
-    business: string;
-    ai: string;
-    email: string;
+  const targetDomain = import.meta.env.VITE_TEST_DOMAIN;
+  const currentDomain = window.location.hostname;
+
+  const isTargetDomain = currentDomain === targetDomain;
+
+  const Watermark = ({ text }: { text: string }) => (
+    <div
+      style={{
+        position: "fixed",
+        top: 0,
+        left: 0,
+        width: "100%",
+        height: "100%",
+        pointerEvents: "none",
+        background: "transparent",
+        zIndex: 9999,
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center",
+        color: "rgba(0, 0, 0, 0.1)",
+        fontSize: "5rem",
+        fontWeight: "bold",
+        textTransform: "uppercase",
+      }}
+    >
+      {text}
+    </div>
+  );
+
+  return (
+    <div id="app-container">
+      {isTargetDomain && <Watermark text="Test Test Test" />}
+      <Routes>
+        <Route path="404" element={<NotFoundPage />} />
+        <Route path="500" element={<ServerErrorPage />} />
+        <Route path="*" element={<Navigate to="/404" replace />} />
+
+        <Route element={<PublicRoute />}>
+          {!hasVisitedSplash && <Route path="/" element={<Splash />} />}
+          {/* hasVisitedSplash가 true일 때 로그인 상태에 따라 렌더링 */}
+          {hasVisitedSplash && !isLoggedIn && (
+            <Route path="/" element={<Start />} />
+          )}
+          <Route path="/start" element={<Start />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/find-email" element={<FindEmail />} />
+          <Route path="/email-result" element={<EmailResult />} />
+          <Route path="/find-password" element={<FindPassword />} />
+          <Route path="/join" element={<Join />} />
+          <Route path="/reset-password" element={<ResetPassword />} />
+        </Route>
+
+        <Route element={<PrivateRoute />}>
+          {hasVisitedSplash && <Route path="/" element={<Home />} />}
+          <Route path="notice" element={<NotificationPage />} />
+
+          <Route element={<RequireMydataLinked />}>
+            <Route
+              path="/account/detail/:accountId"
+              element={<AccountDetail />}
+            />
+            <Route path="/settlement" element={<Settlement />}>
+              <Route index element={<Navigate to="receive" replace />} />
+              <Route path="receive" element={<ReceiveMoney />} />
+              <Route path="details/:settlementId" element={<ReceiveDetail />} />
+              <Route path="send" element={<SendMoney />} />
+              <Route path="memberselect" element={<MemberSelect />} />
+              <Route path="action" element={<SettlementOptionsPage />}>
+                <Route path="split" element={<Split />} />
+                <Route path="receipt" element={<Receipt />} />
+              </Route>
+              <Route path="request" element={<SettlementReq />} />
+              <Route path="complete" element={<SettlementComplete />} />
+            </Route>
+            <Route path="/transfer" element={<Transfer />} />
+            <Route path="/transfer/sendamount" element={<SendAmount />} />
+            <Route path="/transfer/confirm" element={<ConfirmTransfer />} />
+            <Route path="/transfer/success" element={<TransferSuccess />} />
+          </Route>
+          <Route path="/friends" element={<FriendList />} />
+          <Route path="/blocklist" element={<BlockedList />} />
+          <Route path="/deletedlist" element={<DeleteList />} />
+          <Route path="/groups" element={<GroupList />} />
+          <Route path="/addfriend" element={<AddFriend />} />
+          <Route path="/create-group" element={<CreateGroup />} />
+          <Route path="/groups/:groupId" element={<GroupDetail />} />
+
+          <Route path="/my-info" element={<MyInfo />}>
+            <Route path="change-password" element={<ChangePassword />} />
+            <Route element={<RequireMydataLinked />}>
+              <Route path="change-pin" element={<ChangePin />} />
+            </Route>
+          </Route>
+        </Route>
+      </Routes>
+    </div>
+  );
 }
 
-// 서버 URL 매핑
-const SERVER_URLS: Record<keyof ServerStatus, string> = {
-    auth: 'http://localhost/auth',
-    business: 'http://localhost/business',
-    ai: 'http://localhost/ai',
-    email: 'http://localhost/email',
-};
-
-const HealthCheck: React.FC = () => {
-    const [status, setStatus] = useState<ServerStatus>({
-        auth: 'Unknown',
-        business: 'Unknown',
-        ai: 'Unknown',
-        email: 'Unknown',
-    });
-
-    // 서버 상태를 확인하는 함수
-    const checkHealth = async (server: keyof ServerStatus) => {
-        try {
-            const response = await fetch(`${SERVER_URLS[server]}/health`);
-            if (response.status === 200) {
-                setStatus((prev) => ({ ...prev, [server]: 'Healthy' }));
-            } else {
-                setStatus((prev) => ({ ...prev, [server]: 'Unhealthy' }));
-            }
-        } catch (error) {
-            setStatus((prev) => ({ ...prev, [server]: 'Unhealthy' }));
-        }
-    };
-
-    return (
-        <>
-         <div>
-            <button onClick={() => checkHealth('auth')}>Auth Server</button>
-            <p>Auth Server: {status.auth}</p>
-
-            <button onClick={() => checkHealth('business')}>Business Server</button>
-            <p>Business Server: {status.business}</p>
-
-            <button onClick={() => checkHealth('ai')}>AI Server</button>
-            <p>AI Server: {status.ai}</p>
-
-            <button onClick={() => checkHealth('email')}>Email Server</button>
-            <p>Email Server: {status.email}</p>
-        </div>
-        <div>
-        <iframe src="http://localhost:3000/d-solo/be2hf6gx8ndhce/tacobank?from=1730356747970&to=1730358547970&timezone=browser&refresh=auto&showCategory=Panel%20options&orgId=1&panelId=1&__feature.dashboardSceneSolo" width="450" height="200" frameBorder="0"></iframe>
-        <iframe src="http://localhost:3000/d-solo/be2hf6gx8ndhce/tacobank?from=1730356777787&to=1730358577787&timezone=browser&refresh=auto&showCategory=Panel%20options&orgId=1&panelId=2&__feature.dashboardSceneSolo" width="450" height="200" frameBorder="0"></iframe>
-        <iframe src="http://localhost:3000/d-solo/be2hf6gx8ndhce/tacobank?from=1730356797895&to=1730358597895&timezone=browser&refresh=auto&showCategory=Panel%20options&orgId=1&panelId=3&__feature.dashboardSceneSolo" width="450" height="200" frameBorder="0"></iframe>
-        <iframe src="http://localhost:3000/d-solo/be2hf6gx8ndhce/tacobank?from=1730356804492&to=1730358604492&timezone=browser&refresh=auto&showCategory=Panel%20options&orgId=1&panelId=4&__feature.dashboardSceneSolo" width="450" height="200" frameBorder="0"></iframe>
-        <iframe src="http://localhost:3000/d-solo/be2hf6gx8ndhce/tacobank?from=1730356814494&to=1730358614495&timezone=browser&refresh=auto&showCategory=Panel%20options&orgId=1&panelId=5&__feature.dashboardSceneSolo" width="450" height="200" frameBorder="0"></iframe>
-        <iframe src="http://localhost:3000/d-solo/be2hf6gx8ndhce/tacobank?from=1730356824495&to=1730358624495&timezone=browser&refresh=auto&showCategory=Panel%20options&orgId=1&panelId=6&__feature.dashboardSceneSolo" width="450" height="200" frameBorder="0"></iframe>
-        </div>
-        </>
-       
-    );
-};
-
-export default HealthCheck;
+export default App;

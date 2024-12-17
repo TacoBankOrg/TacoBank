@@ -1,14 +1,15 @@
-# Node.js 기반 프론트엔드 서버 배포
-FROM node:18-slim
+# Stage 1: React 빌드
+FROM node:18 AS build
 WORKDIR /app
-
-# 의존성 설치 및 코드 복사
-COPY package.json package-lock.json ./
+COPY package*.json ./
 RUN npm install
 COPY . .
-
-# 빌드 및 프론트엔드 서버 실행
 RUN npm run build
-EXPOSE 5173
 
-CMD ["npm", "run", "preview"]
+# Stage 2: NGINX 설정 및 정적 파일 서빙
+FROM nginx:alpine
+COPY nginx.conf /etc/nginx/nginx.conf 
+COPY --from=build /app/dist /usr/share/nginx/taco 
+
+EXPOSE 9003
+CMD ["nginx", "-g", "daemon off;"]

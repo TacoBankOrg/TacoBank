@@ -1,0 +1,51 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: taco-auth-config
+  namespace: {{ .Release.Namespace }}
+data:
+  application.yml: |
+    spring:
+      config:
+        location: file:/path/to/config/application.yml
+      application:
+        name: tacobank_auth_server
+      datasource:
+        driver-class-name: org.mariadb.jdbc.Driver
+        url: jdbc:mariadb://{{ .Values.env.DB_HOST }}:{{ .Values.env.DB_PORT }}/{{ .Values.env.DB_NAME }}
+        username: {{ .Values.env.DB_USERNAME }}
+        password: {{ .Values.env.DB_PASSWORD }}
+
+      jpa:
+        hibernate:
+          ddl-auto: {{ .Values.env.DDL_TYPE }}
+        database-platform: org.hibernate.dialect.MariaDBDialect
+
+      data:
+        redis:
+          host: {{ .Values.env.REDIS_HOST }}
+          port: {{ .Values.env.REDIS_PORT }}
+    server:
+      port: {{ .Values.env.TACO_AUTH_PORT }}
+
+    management:
+      health:
+        db:
+          enabled: true
+        redis:
+          enabled: true
+
+    jwt:
+      secret: {{ .Values.env.TACO_JWT_SECRET }}
+
+    encryption:
+      secret:
+        key: {{ .Values.env.TACO_ENC_KEY }}
+
+    aws:
+      s3:
+        bucket-name: {{ .Values.env.AWS_S3_BUCKET_NAME }}
+        folder: {{ .Values.env.AWS_S3_FOLDER_PATH_AUTH }}
+        access-key: {{ .Values.env.AWS_S3_IAM_ACCESS_KEY }}
+        secret-key: {{ .Values.env.AWS_S3_IAM_SECRET_KEY }}
+        region: {{ .Values.env.AWS_S3_REGION }}

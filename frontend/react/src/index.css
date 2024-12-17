@@ -1,0 +1,54 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+	font-family: 'Pretendard Variable';
+	font-weight: 45 920;
+	font-style: normal;
+	font-display: swap;
+	src: url('/src/assets/font/PretendardVariable.woff2') format('woff2-variations');
+}
+
+
+/* 전역 스크롤 숨김 */
+::-webkit-scrollbar {
+  display: none;
+}
+
+input[type="number"]::-webkit-inner-spin-button,
+input[type="number"]::-webkit-outer-spin-button {
+  -webkit-appearance: none; /* Chrome, Safari, Edge */
+  margin: 0;
+}
+
+input[type="number"] {
+  -moz-appearance: textfield; /* Firefox */
+}
+
+html {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+:root {
+  --background: #ffffff;
+  --foreground: #424242;
+  --app-width: 400px;
+  --app-height: 100vh;
+  --min-app-height: 600px;
+  --nav-bg-color: #ffffff; /* 기본 라이트 모드 색상 */
+  --button-color: #BDBDBD; /* 버튼 기본 텍스트 색상 */
+}
+
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+}

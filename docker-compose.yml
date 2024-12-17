@@ -38,7 +38,7 @@ services:
       - tacobank
 
   business-server:
-    build: ./backend/business_server
+    build: backend/core_server
     container_name: business-server
     ports:
       - "8081:8081"

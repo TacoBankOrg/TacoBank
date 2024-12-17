@@ -1,0 +1,72 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: taco-core-config
+  namespace: {{ .Release.Namespace }}
+data:
+  application.yml: |
+    spring:
+      jackson:
+        time-zone: Asia/Seoul
+      config:
+        location: file:/path/to/config/application.yml
+      application:
+        name: tacobank_core_server
+      datasource:
+        driver-class-name: org.mariadb.jdbc.Driver
+        url: jdbc:mariadb://{{ .Values.env.DB_HOST }}:{{ .Values.env.DB_PORT }}/{{ .Values.env.DB_NAME }}
+        username: {{ .Values.env.DB_USERNAME }}
+        password: {{ .Values.env.DB_PASSWORD }}
+        hikari:
+        maximum-pool-size: 8
+        connection-timeout: 30000
+        max-lifetime: 1800000
+        idle-timeout: 30000
+
+      jpa:
+        hibernate:
+          ddl-auto: {{ .Values.env.DDL_TYPE }}
+        database-platform: org.hibernate.dialect.MariaDBDialect
+
+      data:
+        redis:
+          host: {{ .Values.env.REDIS_HOST }}
+          port: {{ .Values.env.REDIS_PORT }}
+    server:
+      port: {{ .Values.env.TACO_CORE_PORT }}
+
+    management:
+      health:
+        db:
+          enabled: true
+        redis:
+          enabled: true
+
+    jwt:
+      secret: {{ .Values.env.TACO_JWT_SECRET }}
+
+    encryption:
+      secret:
+        key: {{ .Values.env.TACO_ENC_KEY }}
+
+    naver:
+      access:
+        key: {{ .Values.env.TACO_NAVER_ACCESS_KEY }}
+      secret:
+        key: {{ .Values.env.TACO_NAVER_SECRET_KEY }}
+      sms:
+        service:
+          id: {{ .Values.env.TACO_NAVER_SMS_ID }}
+        from: {{ .Values.env.TACO_NAVER_SMS_FROM }}
+      ocr:
+        api:
+          url: {{ .Values.env.TACO_NAVER_OCR_URL }}
+          secret: {{ .Values.env.TACO_NAVER_OCR_SECRET }}
+
+    aws:
+      s3:
+        bucket-name: {{ .Values.env.AWS_S3_BUCKET_NAME }}
+        folder: {{ .Values.env.AWS_S3_FOLDER_PATH_CORE }}
+        access-key: {{ .Values.env.AWS_S3_IAM_ACCESS_KEY }}
+        secret-key: {{ .Values.env.AWS_S3_IAM_SECRET_KEY }}
+        region: {{ .Values.env.AWS_S3_REGION }}

@@ -1,0 +1,63 @@
+replicaCount: 4
+
+image:
+  repository: "485298580046.dkr.ecr.ap-northeast-2.amazonaws.com/taco_auth"
+  tag: "latest"
+  pullPolicy: "IfNotPresent"
+
+namespace: "taco-auth"
+createNamespace: false
+
+
+service:
+  type: NodePort
+  port: 9001
+  targetPort: 9001
+  nodePort: 31000
+
+resources:
+  requests:
+    memory: "256Mi"
+    cpu: "100m"
+  limits:
+    memory: "512Mi"
+    cpu: "250m"
+
+autoscaling:
+  enabled: true
+  minReplicas: 4
+  maxReplicas: 8
+  targetCPUUtilizationPercentage: 80
+  targetMemoryUtilizationPercentage: 80
+
+nodeAffinity:
+  enabled: true
+  requiredDuringSchedulingIgnoredDuringExecution:
+    - key: "kubernetes.io/hostname"
+      operator: "In"
+      values:
+        - "ip-172-31-27-15"
+        - "ip-172-31-39-41"
+
+env:
+  DDL_TYPE: "update"
+  PROFILE: ""
+  DB_HOST: ""
+  DB_PORT: ""
+  DB_NAME: ""
+  DB_USERNAME: ""
+  DB_PASSWORD: ""
+  REDIS_HOST: ""
+  REDIS_PORT: ""
+  TACO_AUTH_PORT: ""
+  TESTBED_API_KEY: ""
+  TACO_JWT_SECRET: ""
+  TACO_JWT_EXP: ""
+  TACO_ENC_KEY: ""
+  AWS_S3_REGION: ""
+  AWS_S3_BUCKET_NAME: ""
+  AWS_S3_FOLDER_PATH_AUTH: ""
+  AWS_S3_IAM_ACCESS_KEY: ""
+  AWS_S3_IAM_SECRET_KEY: ""
+
+
